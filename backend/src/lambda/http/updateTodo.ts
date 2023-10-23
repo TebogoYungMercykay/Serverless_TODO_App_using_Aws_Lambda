@@ -1,27 +1,33 @@
 import 'source-map-support/register'
-import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult} from 'aws-lambda'
+
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+import * as middy from 'middy'
+import { cors, httpErrorHandler } from 'middy/middlewares'
+
 import {UpdateTodoRequest} from '../../requests/UpdateTodoRequest'
-import {updateToDo} from "../../businessLogic/ToDo";
+import {updateToDo} from "../../businessLogic/ToDo"
+import { getUserId } from '../utils';
+import { createLogger } from '../../utils/logger'
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
-    console.log("Processing Event ", event);
-    const authorization = event.headers.Authorization;
-    const split = authorization.split(' ');
-    const jwtToken = split[1];
+const logger = createLogger('UpdateToDo');
 
-    const todoId = event.pathParameters.todoId;
-    const updatedTodo: UpdateTodoRequest = JSON.parse(event.body);
-
-    const toDoItem = await updateToDo(updatedTodo, todoId, jwtToken);
-
-    return {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-            "item": toDoItem
-        }),
+export const handler = middy(
+    async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+        const todoId = event.pathParameters.todoId
+        const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
+        logger.info('User updated todo item with id: ', {todoId})
+        // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
+        const token = event.headers.Authorization.split(' ');
+        const toDoItem = await updateToDo(updatedTodo, todoId, token[1]);
+        console.log("Updated todo item with id: ", {todoId});
+        return toDoItem
     }
-};
+)
+
+handler
+    .use(httpErrorHandler())
+    .use(
+        cors({
+            credentials: true
+        })
+    )
