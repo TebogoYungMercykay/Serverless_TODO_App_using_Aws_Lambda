@@ -1,4 +1,4 @@
-# ALX Cloud Development:  Final-project
+# ALX Cloud Development - Final-project
 
 In this project, I will develop and deploy a simple "TODO" application using AWS Lambda and the Serverless framework. This application will allow me to create, remove, update, and get TODO items.
 <img src="./images/serverless-framework.png" alt="Serverless framework" width="100%" height="auto">
