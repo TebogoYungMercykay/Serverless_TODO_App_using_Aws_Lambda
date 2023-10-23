@@ -1,9 +1,8 @@
 # ALX Cloud Development - Final-project
 
-In this project, I will develop and deploy a simple "TODO" application using AWS Lambda and the Serverless framework. This application will allow me to create, remove, update, and get TODO items.
 <img src="./images/serverless-framework.png" alt="Serverless framework" width="100%" height="auto">
 
-Each TODO item will contain the following fields:
+In this project, I will develop and deploy a simple "TODO" application using AWS Lambda and the Serverless framework. This application will allow me to create, remove, update, and get TODO items. Each TODO item will contain the following fields:
 - `todoId` (string): a unique ID for an item.
 - `createdAt` (string): the date and time when an item was created.
 - `name` (string): the name of a TODO item (e.g. "Change a light bulb").
